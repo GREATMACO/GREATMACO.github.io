@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 /* ─── Configuration ─── */
 
@@ -104,6 +104,7 @@ function NumberInput({
         value={String(value)}
         onChange={handleChange}
         placeholder={placeholder}
+        data-price-input="true"
         className="w-40 h-16 pl-8 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.2)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
     </div>
@@ -166,10 +167,6 @@ export default function PricingSurvey() {
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
   const [vwDone, setVwDone] = useState(false);
 
-  // Ref that always tracks the latest answers synchronously — bypasses React async setState
-  const answersRef = useRef(answers);
-  useEffect(() => { answersRef.current = answers; }, [answers]);
-
   // Shuffle VW questions once on mount
   useEffect(() => {
     if (!vwOrder.length) setVwOrder(shuffleArray(VW_QUESTION_TEMPLATES));
@@ -208,9 +205,19 @@ export default function PricingSurvey() {
   const finishSurvey = () => {
     setStep("thankyou");
 
-    // Read from ref — it always has live values even before React state flushes
-    const live = answersRef.current;
-    const finalAnswers = { ...live, priceOrder: vwOrder.map((q) => q.id), timestamp: Date.now() };
+    // Read DOM values directly — React state may be stale from async batching
+    const domInputs = document.querySelectorAll<HTMLInputElement>('[data-price-input="true"]');
+    let finalAnswers: SurveyResponse = { ...answers, priceOrder: vwOrder.map((q) => q.id), timestamp: Date.now() };
+    if (domInputs.length >= 4) {
+      // Overwrite with what the user actually typed
+      const keys = ["vwTooExpensive", "vwTooCheap", "vwGettingExpensive", "vwBargain"];
+      for (let i = 0; i < 4 && domInputs[i]; i++) {
+        const val = parseInt(domInputs[i].value, 10);
+        if (!isNaN(val)) {
+          (finalAnswers as any)[keys[i]] = val;
+        }
+      }
+    }
     saveResponse(finalAnswers);
 
     if (SURVEY_ENDPOINT && SURVEY_APIKEY) {
@@ -329,7 +336,7 @@ export default function PricingSurvey() {
           ].map((opt) => (
             <button
               key={opt.value}
-              onClick={() => { answersRef.current = { ...answersRef.current, screenerHours: opt.value }; setAnswers((prev) => ({ ...prev, screenerHours: opt.value })) }}
+              onClick={() => setAnswers((prev) => ({ ...prev, screenerHours: opt.value }))}
               className={`feature-card py-6 px-8 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${
                 answers.screenerHours === opt.value ? "border-[#c8ff2e]/30 bg-[#c8ff2e]/5" : ""
               }`}
@@ -366,7 +373,7 @@ export default function PricingSurvey() {
           <p className="text-[#9f9dab] text-sm mb-10">{currentVwQuestion.subtext}</p>
           <NumberInput
             value={answers[vwAnswerKey] as number}
-            onChange={(v) => { answersRef.current = { ...answersRef.current, [vwAnswerKey]: v }; setAnswers((prev) => ({ ...prev, [vwAnswerKey]: v })) }}
+            onChange={(v) => setAnswers((prev) => ({ ...prev, [vwAnswerKey]: v }))}
             placeholder={currentVwQuestion.displayPlaceholder}
           />
           <div className="mt-12">
@@ -402,7 +409,7 @@ export default function PricingSurvey() {
             ].map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => { answersRef.current = { ...answersRef.current, painWorth: opt.value }; setAnswers((prev) => ({ ...prev, painWorth: opt.value })) }}
+                onClick={() => setAnswers((prev) => ({ ...prev, painWorth: opt.value }))}
                 className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${
                   answers.painWorth === opt.value ? "border-[#c8ff2e]/30 bg-[#c8ff2e]/5" : ""
                 }`}
