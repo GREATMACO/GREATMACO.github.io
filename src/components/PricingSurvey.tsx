@@ -120,13 +120,19 @@ export default function PricingSurvey() {
     // Extract screener selection
     const screener = String(f.get("screener") || "");
 
-    // Validate required fields
-    if (!screener) { alert("Please select how much time you spend scrolling."); return; }
-    if (!String(f.get("tooExpensive")).trim()) { alert("Please enter a price for 'Too Expensive'."); return; }
-    if (!String(f.get("tooCheap")).trim()) { alert("Please enter a price for 'Too Cheap'."); return; }
-    if (!String(f.get("gettingExpensive")).trim()) { alert("Please enter a price for 'Getting Expensive'."); return; }
-    if (!String(f.get("bargain")).trim()) { alert("Please enter a price for 'Bargain'."); return; }
-    if (!String(f.get("painWorth")).trim()) { alert("Please select your willingness to pay."); return; }
+    // Only validate on final page ("See results") — intermediate steps always move forward
+    if (step === "pain") {
+      if (!screener) { alert("Please select how much time you spend scrolling."); return; }
+      if (!String(f.get("tooExpensive")).trim()) { alert("Please enter a price for 'Too Expensive'."); return; }
+      if (!String(f.get("tooCheap")).trim()) { alert("Please enter a price for 'Too Cheap'."); return; }
+      if (!String(f.get("gettingExpensive")).trim()) { alert("Please enter a price for 'Getting Expensive'."); return; }
+      if (!String(f.get("bargain")).trim()) { alert("Please enter a price for 'Bargain'."); return; }
+      if (!String(f.get("painWorth")).trim()) { alert("Please select your willingness to pay."); return; }
+    } else {
+      // Move to next question without validating other fields
+      goToNext(step);
+      return;
+    }
 
     // Extract numeric VW inputs — always parse as Number (safe with text input)
     const vwFields: SurveyResponse = {
