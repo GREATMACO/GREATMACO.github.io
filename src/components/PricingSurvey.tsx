@@ -81,10 +81,10 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 /* ─── VW Question data ─── */
 
 const VW_QUESTION_TEMPLATES = [
-  { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price would this app be so expensive that you would NEVER consider subscribing?', subtext: 'This is your number, not ours. We do not have a preference.', placeholder: "25" },
-  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would this app be so cheap that you\'d question its quality?', subtext: 'There is a price where it feels too good to be true. Where is it for you?', placeholder: "3" },
-  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price does this app start to get expensive, but you\'d still consider it?', subtext: 'Still worth it at this point. Something feels off. Where is that line?', placeholder: "12" },
-  { id: "bargain", label: '"Bargain"', question: 'At what price would you consider this a fantastic deal and buy immediately?', subtext: 'You\'d pay this without thinking. What is that number for you?', placeholder: "5" },
+  { id: "tooExpensive", label: '"Too Expensive"', question: 'Where does a monthly price feel like a rip off?', subtext: 'We need your honest number. No right answer.', placeholder: "" },
+  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you suspect this tool is not worth the effort?', subtext: 'Too low and it feels like a scam. Where does that line start for you?', placeholder: "" },
+  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'Where does the price still feel okay, but your finger hesitates before tap buy?', subtext: 'Still tempting. But the math starts catching up to you.', placeholder: "" },
+  { id: "bargain", label: '"Bargain"', question: 'At what price would you subscribe without a second thought?', subtext: 'You tap buy without thinking twice. That is the price.', placeholder: "" },
 ];
 
 const SCREENER_OPTIONS = [
@@ -107,8 +107,10 @@ export default function PricingSurvey() {
   const [step, setStep] = useState<"landing" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
   const [result, setResult] = useState<SurveyResponse | null>(null);
+  const [selectedPain, setSelectedPain] = useState<string>("");
+  const [selectedScreener, setSelectedScreener] = useState<string>("");
 
-  // Shuffle VW questions once on mount — stored only for display order & analysis metadata
+  // Shuffle VW questions once on mount, stored only for display order & analysis metadata
   useEffect(() => { if (!vwOrder.length) setVwOrder(shuffleArray(VW_QUESTION_TEMPLATES)); }, []);
 
   /* ── Submit handler: reads native form element values directly ── */
@@ -120,7 +122,7 @@ export default function PricingSurvey() {
     // Extract screener selection
     const screener = String(f.get("screener") || "");
 
-    // Only validate on final page ("See results") — intermediate steps always move forward
+    // Only validate on final page ("See results"), intermediate steps always move forward
     if (step === "pain") {
       if (!screener) { alert("Please select how much time you spend scrolling."); return; }
       if (!String(f.get("tooExpensive")).trim()) { alert("Please enter a price for 'Too Expensive'."); return; }
@@ -134,7 +136,7 @@ export default function PricingSurvey() {
       return;
     }
 
-    // Extract numeric VW inputs — always parse as Number (safe with text input)
+    // Extract numeric VW inputs, always parse as Number (safe with text input)
     const vwFields: SurveyResponse = {
       screenerHours: screener,
       vwTooExpensive: parseInt(String(f.get("tooExpensive")), 10),
@@ -166,7 +168,7 @@ export default function PricingSurvey() {
     setStep("thankyou");
 
     // Post collected survey data to Google Sheets via hidden form + target iframe
-    const WEBHOOK = process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbzGiqWWnT2H9VEOAo50oTsMynv-mmYeMe_Lwxocjol_f9G9TxZHrjv3a6O9EhHjyQ/exec';
+    const WEBHOOK = process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbwMDJlf8YkBYEb5SHqzqHqbXVPLz2aftGuGvm4DlEKaGSDZa2IX2wyDAaBcVRqPqYAu/exec';
     if (WEBHOOK) {
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
@@ -214,10 +216,13 @@ export default function PricingSurvey() {
       <section className="py-32 px-6 border-b border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
           <span className="eyebrow block mb-6">Pricing Research</span>
-          <h2 className="text-xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6 leading-tight">Help us set fair pricing.</h2>
+          <h2 className="text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How much is your attention worth?</h2>
+          <p className="text-[#9f9dab] text-lg leading-relaxed mb-6">
+            Many people spend hours a day on their screen. Not because they want to, but because it is right there. Apps and feeds are designed to catch you. We have to fight the same pull.
+          </p>
           <p className="text-[#9f9dab] text-lg leading-relaxed mb-10">
-            We are testing real prices for 404 Collective. This takes about two minutes.<br />
-            Your answers directly shape our launch pricing.
+            Those hours. Getting them back. What would that be worth to you?
+            We are building something that gives your attention back to you. To set fair pricing, we need your honest perspective.
           </p>
           {/* Consent banner */}
           <div className="text-center">
@@ -238,11 +243,11 @@ export default function PricingSurvey() {
     return (
       <section className="py-32 px-6 border-t border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="text-xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6 leading-tight">Thank you. Your input matters.</h2>
+          <h2 className="text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Thank you. Your input matters.</h2>
           <p className="text-[#9f9dab] mb-10">Your response has been saved. We will use your answers to set fair pricing for the launch.</p>
           <a href="/waitlist" className="btn-primary text-base px-10 py-4 inline-block">Join the waitlist <span className="arrow ml-2">→</span></a>
 
-          {/* Data summary — debug reference */}
+          {/* Data summary - debug reference */}
           <details className="mt-16 max-w-md mx-auto text-left">
             <summary className="text-sm text-[#6b6980] cursor-pointer hover:text-[#9f9dab] transition-colors">View your data (for debugging)</summary>
             <pre className="mt-4 p-4 bg-[#111115]/80 rounded text-xs text-[#6b6980] overflow-x-auto whitespace-pre-wrap break-all">
@@ -263,19 +268,19 @@ export default function PricingSurvey() {
       <div id="page-screener" className={step !== "screener" ? "hidden" : ""}>
         <QuestionCard>
           <ProgressBar current={1} total={6} />
-          <span className="eyebrow block mb-6">Frage 1 von 6</span>
-          <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">How many hours per day do you scroll mindlessly on your phone?</h2>
-          <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We will not judge.</p>
+          <span className="eyebrow block mb-6">Question 1 of 6</span>
+          <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How much time per day passes on your screen that you never meant to spend there?</h2>
+          <p className="text-[#9f9dab] mb-10 text-sm">Think about last week. Count only hours you wish you could throw away.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => { const radio = document.querySelector<HTMLInputElement>(`input[name="screener"][value="${opt.value}"]`); if (radio) radio.click(); goToNext("screener"); }}
+                onClick={() => setSelectedScreener(opt.value)}
                 data-screener-select={opt.value}
-                className={`feature-card py-6 px-8 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200`}
+                className={`feature-card py-6 px-8 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedScreener === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}
               >
-                <input type="radio" name="screener" value={opt.value} className="hidden peer" />
+                <input type="radio" name="screener" value={opt.value} className="hidden peer" checked={selectedScreener === opt.value} />
                 <span className="text-lg font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
               </button>
             ))}
@@ -286,20 +291,20 @@ export default function PricingSurvey() {
         </QuestionCard>
       </div>
 
-      {/* ── VW Questions (Q2–Q5) — one per page ── */}
+      {/* ── VW Questions (Q2–Q5), one per page ── */}
       {vwOrder.length > 0 && [
         { step: "vw1", idx: 0 }, { step: "vw2", idx: 1 }, { step: "vw3", idx: 2 }, { step: "vw4", idx: 3 }
       ].map(({ step: s, idx }) => (
         <div key={s} id={`page-${s}`} className={step !== s ? "hidden" : ""}>
           <QuestionCard>
             <ProgressBar current={idx + 2} total={6} />
-            <span className="eyebrow block mb-6">Frage {idx + 2} von 6 — {vwOrder[idx]?.label}</span>
-            <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">{vwOrder[idx]?.question}</h2>
+            <span className="eyebrow block mb-6">Question {idx + 2} of 6 ({vwOrder[idx]?.label})</span>
+            <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">{vwOrder[idx]?.question}</h2>
             <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>
-            {/* Numeric input — type="text" with inputMode="numeric" for universal browser support */}
+            {/* Numeric input, type="text" with inputMode="numeric" for universal browser support */}
             <div className="relative inline-block mb-2">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#6b6980] font-space font-bold text-3xl pointer-events-none select-none">€</span>
-              <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder={vwOrder[idx]?.placeholder || ""} className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder="" className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="mt-12">
               <button type="submit" className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
@@ -310,22 +315,24 @@ export default function PricingSurvey() {
 
       {/* ── Pain-to-WTP (Q6) ── */}
       <div id="page-pain" className={step !== "pain" ? "hidden" : ""}>
-        <section className="py-24 px-6 border-t border-[rgba(255,255,255,0.04)]">
+        <section className="py-24 px-6 border-t border-[rgba(255,255,255,0.04)] text-center">
+          <div className="mx-auto max-w-lg">
           <ProgressBar current={6} total={6} />
-          <span className="eyebrow block mb-6">Frage 6 von 6</span>
-          <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">If this app saved you 2 hours of scrolling per day and actually helped break the habit, what would that be worth to you?</h2>
-          <p className="text-[#9f9dab] mb-2 text-sm text-center">Pick the range that matches your willingness.</p>
-          <p className="text-[#6b6980] mb-8 text-xs text-center">— click one of the options below —</p>
+          <span className="eyebrow block mb-6 text-center">Question 6 of 6</span>
+          <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What would a fair monthly price be, if this app gave your time back every day?</h2>
+          <p className="text-[#9f9dab] mb-2 text-sm text-center">Choose the range that feels right for the value you'd get.</p>
+          <p className="text-[#6b6980] mb-8 text-xs text-center">Pick any option below. <span className="block mt-1 text-[#6b6980]">Tap once to select.</span></p>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
             {PAIN_OPTIONS.map((opt) => (
-              <button key={opt.value} type="button" onClick={() => { const radio = document.querySelector<HTMLInputElement>(`input[name="painWorth"][value="${opt.value}"]`); if (radio) radio.click(); goToNext("pain"); }} data-pain-select={opt.value} className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200">
-                <input type="radio" name="painWorth" value={opt.value} className="hidden peer" />
+              <button key={opt.value} type="button" onClick={() => setSelectedPain(opt.value)} data-pain-select={opt.value} className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPain === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}>
+                <input type="radio" name="painWorth" value={opt.value} className="hidden peer" checked={selectedPain === opt.value} />
                 <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
               </button>
             ))}
           </div>
-          <div className="mt-12">
-            <button type="submit" className="btn-primary text-base px-8 py-3">See results <span className="arrow ml-2">→</span></button>
+          <div className="mt-12 flex justify-center">
+            <button type="submit" className="btn-primary text-base px-8 py-3">Submit survey <span className="arrow ml-2">→</span></button>
+          </div>
           </div>
         </section>
       </div>
