@@ -117,16 +117,24 @@ export default function PricingSurvey() {
     const form = e.currentTarget;
     const f = new FormData(form);
 
-    // Extract screener selection from hidden radio input
+    // Extract screener selection
     const screener = String(f.get("screener") || "");
 
-    // Extract numeric VW inputs (native number inputs — always return current value)
+    // Validate required fields
+    if (!screener) { alert("Please select how much time you spend scrolling."); return; }
+    if (!String(f.get("tooExpensive")).trim()) { alert("Please enter a price for 'Too Expensive'."); return; }
+    if (!String(f.get("tooCheap")).trim()) { alert("Please enter a price for 'Too Cheap'."); return; }
+    if (!String(f.get("gettingExpensive")).trim()) { alert("Please enter a price for 'Getting Expensive'."); return; }
+    if (!String(f.get("bargain")).trim()) { alert("Please enter a price for 'Bargain'."); return; }
+    if (!String(f.get("painWorth")).trim()) { alert("Please select your willingness to pay."); return; }
+
+    // Extract numeric VW inputs — always parse as Number (safe with text input)
     const vwFields: SurveyResponse = {
       screenerHours: screener,
-      vwTooExpensive: Number(f.get("tooExpensive") || 25),
-      vwTooCheap: Number(f.get("tooCheap") || 3),
-      vwGettingExpensive: Number(f.get("gettingExpensive") || 12),
-      vwBargain: Number(f.get("bargain") || 5),
+      vwTooExpensive: parseInt(String(f.get("tooExpensive")), 10),
+      vwTooCheap: parseInt(String(f.get("tooCheap")), 10),
+      vwGettingExpensive: parseInt(String(f.get("gettingExpensive")), 10),
+      vwBargain: parseInt(String(f.get("bargain")), 10),
       painWorth: String(f.get("painWorth") || ""),
       priceOrder: vwOrder.map((q) => q.id),
       timestamp: Date.now(),
@@ -244,7 +252,7 @@ export default function PricingSurvey() {
             ))}
           </div>
           <div className="mt-12">
-            <button type="submit" disabled className="btn-primary text-base px-8 py-3 disabled:opacity-50">Next <span className="arrow ml-2">→</span></button>
+            <button type="submit" className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
           </div>
         </QuestionCard>
       </div>
@@ -259,10 +267,13 @@ export default function PricingSurvey() {
             <span className="eyebrow block mb-6">Frage {idx + 2} von 6 — {vwOrder[idx]?.label}</span>
             <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-4 leading-tight">{vwOrder[idx]?.question}</h2>
             <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>
-            {/* Native HTML5 number input — uncontrolled. No value prop = no React state binding */}
-            <input type="number" name={vwOrder[idx]?.id} min={0} max={99} placeholder={vwOrder[idx]?.placeholder || "€"} step="1" className="w-40 h-16 px-8 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.2)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+            {/* Numeric input — type="text" with inputMode="numeric" for universal browser support */}
+            <div className="relative inline-block mb-2">
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#6b6980] font-space font-bold text-3xl pointer-events-none select-none">€</span>
+              <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} pattern="[0-9]*" placeholder={vwOrder[idx]?.placeholder || ""} className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+            </div>
             <div className="mt-12">
-              <button type="submit" disabled className="btn-primary text-base px-8 py-3 disabled:opacity-50">Next <span className="arrow ml-2">→</span></button>
+              <button type="submit" className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
             </div>
           </QuestionCard>
         </div>
