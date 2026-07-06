@@ -165,13 +165,33 @@ export default function PricingSurvey() {
     setResult(vwFields);
     setStep("thankyou");
 
-    // Post collected survey data to webhook for admin review
-    if (process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL) {
-      fetch(process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(vwFields),
-      }).catch(() => {});
+    // Post collected survey data to Google Sheets via hidden form + target iframe
+    const WEBHOOK = process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbzGiqWWnT2H9VEOAo50oTsMynv-mmYeMe_Lwxocjol_f9G9TxZHrjv3a6O9EhHjyQ/exec';
+    if (WEBHOOK) {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.name = '_gsh_' + Date.now();
+      iframe.id = iframe.name;
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.method = 'GET';
+      form.action = WEBHOOK;
+      form.target = iframe.name;
+      Object.entries(vwFields).forEach(([k, v]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = k;
+        input.value = String(v);
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        if (form.parentNode) form.remove();
+        if (iframe.parentNode) iframe.remove();
+      }, 10000);
     }
   };
 
@@ -194,7 +214,7 @@ export default function PricingSurvey() {
       <section className="py-32 px-6 border-b border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
           <span className="eyebrow block mb-6">Pricing Research</span>
-          <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-6 leading-tight">Help us set fair pricing.</h2>
+          <h2 className="text-xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6 leading-tight">Help us set fair pricing.</h2>
           <p className="text-[#9f9dab] text-lg leading-relaxed mb-10">
             We are testing real prices for 404 Collective. This takes about two minutes.<br />
             Your answers directly shape our launch pricing.
@@ -218,7 +238,7 @@ export default function PricingSurvey() {
     return (
       <section className="py-32 px-6 border-t border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-6 leading-tight">Thank you. Your input matters.</h2>
+          <h2 className="text-xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6 leading-tight">Thank you. Your input matters.</h2>
           <p className="text-[#9f9dab] mb-10">Your response has been saved. We will use your answers to set fair pricing for the launch.</p>
           <a href="/waitlist" className="btn-primary text-base px-10 py-4 inline-block">Join the waitlist <span className="arrow ml-2">→</span></a>
 
@@ -244,7 +264,7 @@ export default function PricingSurvey() {
         <QuestionCard>
           <ProgressBar current={1} total={6} />
           <span className="eyebrow block mb-6">Frage 1 von 6</span>
-          <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-4 leading-tight">How many hours per day do you scroll mindlessly on your phone?</h2>
+          <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">How many hours per day do you scroll mindlessly on your phone?</h2>
           <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We will not judge.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
@@ -274,7 +294,7 @@ export default function PricingSurvey() {
           <QuestionCard>
             <ProgressBar current={idx + 2} total={6} />
             <span className="eyebrow block mb-6">Frage {idx + 2} von 6 — {vwOrder[idx]?.label}</span>
-            <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-4 leading-tight">{vwOrder[idx]?.question}</h2>
+            <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">{vwOrder[idx]?.question}</h2>
             <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>
             {/* Numeric input — type="text" with inputMode="numeric" for universal browser support */}
             <div className="relative inline-block mb-2">
@@ -293,9 +313,9 @@ export default function PricingSurvey() {
         <section className="py-24 px-6 border-t border-[rgba(255,255,255,0.04)]">
           <ProgressBar current={6} total={6} />
           <span className="eyebrow block mb-6">Frage 6 von 6</span>
-          <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-4 leading-tight">If this app saved you 2 hours of scrolling per day and actually helped break the habit, what would that be worth to you?</h2>
-          <p className="text-[#9f9dab] mb-2 text-sm">Pick the range that matches your willingness.</p>
-          <p className="text-[#6b6980] mb-8 text-xs">— click one of the options below —</p>
+          <h2 className="text-xl font-space font-semibold text-[#e8e7e9] leading-snug max-w-lg mx-auto mb-4">If this app saved you 2 hours of scrolling per day and actually helped break the habit, what would that be worth to you?</h2>
+          <p className="text-[#9f9dab] mb-2 text-sm text-center">Pick the range that matches your willingness.</p>
+          <p className="text-[#6b6980] mb-8 text-xs text-center">— click one of the options below —</p>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
             {PAIN_OPTIONS.map((opt) => (
               <button key={opt.value} type="button" onClick={() => { const radio = document.querySelector<HTMLInputElement>(`input[name="painWorth"][value="${opt.value}"]`); if (radio) radio.click(); goToNext("pain"); }} data-pain-select={opt.value} className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200">
