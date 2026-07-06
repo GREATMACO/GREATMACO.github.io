@@ -106,7 +106,7 @@ const PAIN_OPTIONS = [
 export default function PricingSurvey() {
   const [step, setStep] = useState<"landing" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
-  const [result, setResult] = useState<SurveyResponse & { fairPrice: number } | null>(null);
+  const [result, setResult] = useState<SurveyResponse | null>(null);
 
   // Shuffle VW questions once on mount — stored only for display order & analysis metadata
   useEffect(() => { if (!vwOrder.length) setVwOrder(shuffleArray(VW_QUESTION_TEMPLATES)); }, []);
@@ -162,8 +162,17 @@ export default function PricingSurvey() {
       }).catch(() => {});
     }
 
-    setResult({ ...vwFields, fairPrice: calcOptimalPrice(vwFields.vwTooExpensive, vwFields.vwTooCheap, vwFields.vwGettingExpensive, vwFields.vwBargain) });
+    setResult(vwFields);
     setStep("thankyou");
+
+    // Post collected survey data to webhook for admin review
+    if (process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL) {
+      fetch(process.env.NEXT_PUBLIC_SURVEY_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(vwFields),
+      }).catch(() => {});
+    }
   };
 
   /* ── Navigation helpers (only control which page is visible, not data) ── */
@@ -206,24 +215,18 @@ export default function PricingSurvey() {
   }
 
   if (step === "thankyou" && result) {
-    const optimal = result.fairPrice;
     return (
       <section className="py-32 px-6 border-t border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="section-heading section-heading-md max-w-lg mx-auto mb-6 leading-tight">Thank you. Your input matters.</h2>
-          <p className="text-[#9f9dab] mb-10">Based on your answers, a fair price would be around:</p>
-          <div className="inline-block py-8 px-12 border border-[#c8ff2e]/30 bg-[#c8ff2e]/5 mb-10">
-            <span className="text-6xl font-space font-bold text-[#c8ff2e]">€{optimal}</span>
-            <span className="text-lg text-[#6b6980] ml-2">/month</span>
-          </div>
-          <p className="text-[#9f9dab] mb-10 max-w-md mx-auto leading-relaxed">This estimate comes from your price thresholds. Real pricing may differ based on features and development costs, but your range matters a lot.</p>
+          <p className="text-[#9f9dab] mb-10">Your response has been saved. We will use your answers to set fair pricing for the launch.</p>
           <a href="/waitlist" className="btn-primary text-base px-10 py-4 inline-block">Join the waitlist <span className="arrow ml-2">→</span></a>
 
           {/* Data summary — debug reference */}
           <details className="mt-16 max-w-md mx-auto text-left">
             <summary className="text-sm text-[#6b6980] cursor-pointer hover:text-[#9f9dab] transition-colors">View your data (for debugging)</summary>
             <pre className="mt-4 p-4 bg-[#111115]/80 rounded text-xs text-[#6b6980] overflow-x-auto whitespace-pre-wrap break-all">
-              {JSON.stringify({ screener: result.screenerHours, tooExpensive: result.vwTooExpensive, tooCheap: result.vwTooCheap, gettingExpensive: result.vwGettingExpensive, bargain: result.vwBargain, painWorth: result.painWorth, fairPrice: optimal }, null, 2)}
+              {JSON.stringify({ screener: result.screenerHours, tooExpensive: result.vwTooExpensive, tooCheap: result.vwTooCheap, gettingExpensive: result.vwGettingExpensive, bargain: result.vwBargain, painWorth: result.painWorth }, null, 2)}
             </pre>
           </details>
         </div>
