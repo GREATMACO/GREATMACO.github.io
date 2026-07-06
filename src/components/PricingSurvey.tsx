@@ -242,9 +242,9 @@ export default function PricingSurvey() {
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => goToNext("screener")}
+                onClick={() => { const radio = document.querySelector<HTMLInputElement>(`input[name="screener"][value="${opt.value}"]`); if (radio) radio.click(); goToNext("screener"); }}
                 data-screener-select={opt.value}
-                className={`feature-card py-6 px-8 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${/* highlight logic via JS attribute below */""}`}
+                className={`feature-card py-6 px-8 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200`}
               >
                 <input type="radio" name="screener" value={opt.value} className="hidden peer" />
                 <span className="text-lg font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
@@ -289,14 +289,14 @@ export default function PricingSurvey() {
           <p className="text-[#6b6980] mb-8 text-xs">— click one of the options below —</p>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
             {PAIN_OPTIONS.map((opt) => (
-              <button key={opt.value} type="button" onClick={() => goToNext("pain")} data-pain-select={opt.value} className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200">
+              <button key={opt.value} type="button" onClick={() => { const radio = document.querySelector<HTMLInputElement>(`input[name="painWorth"][value="${opt.value}"]`); if (radio) radio.click(); goToNext("pain"); }} data-pain-select={opt.value} className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200">
                 <input type="radio" name="painWorth" value={opt.value} className="hidden peer" />
                 <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
               </button>
             ))}
           </div>
           <div className="mt-12">
-            <button type="submit" disabled className="btn-primary text-base px-8 py-3 disabled:opacity-50">See results <span className="arrow ml-2">→</span></button>
+            <button type="submit" className="btn-primary text-base px-8 py-3">See results <span className="arrow ml-2">→</span></button>
           </div>
         </section>
       </div>
