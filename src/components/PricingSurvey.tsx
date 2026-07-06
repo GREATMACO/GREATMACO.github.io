@@ -270,7 +270,7 @@ export default function PricingSurvey() {
             {/* Numeric input — type="text" with inputMode="numeric" for universal browser support */}
             <div className="relative inline-block mb-2">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#6b6980] font-space font-bold text-3xl pointer-events-none select-none">€</span>
-              <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} pattern="[0-9]*" placeholder={vwOrder[idx]?.placeholder || ""} className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder={vwOrder[idx]?.placeholder || ""} className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="mt-12">
               <button type="submit" className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
