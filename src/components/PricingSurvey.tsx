@@ -82,7 +82,7 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 
 const VW_QUESTION_TEMPLATES = [
   { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price do you stop and think this is too much?', subtext: 'Be honest. We need real numbers.', placeholder: "" },
-  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether the app actually works?', subtext: 'Any lower than that and it feels like a scam. Where is that line for you?', placeholder: "" },
+  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether our app actually works?', subtext: 'Any lower than that and it feels like a scam. Where is that line for you?', placeholder: "" },
   { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'It is still tempting. But something about the price feels wrong.', placeholder: "" },
   { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'You pay immediately. No hesitation.', placeholder: "" },
 ];
@@ -294,11 +294,12 @@ export default function PricingSurvey() {
 
       <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
         <QuestionCard>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Tomorrow you open the app, do your session, put it away and get on with your life.</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if there was a solution that let you use your time the way you actually want to?</h2>
+          <p className="text-[#9f9dab] text-sm mb-4">Here is ours:</p>
 
           {/* Floating field box with yes/no question */}
           <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
-            <p className="text-[#9f9dab] mb-5">Sounds realistic?</p>
+            <p className="text-[#9f9dab] mb-5">Does that sound like something you would try?</p>
             <div className="flex gap-3 justify-center">
               <button type="button" onClick={() => goToNext("pre2")} className="bg-[#c8ff2e] px-8 py-3 font-space font-semibold text-[#000] hover:bg-[#d4ff4a] transition-colors">Yes</button>
               <button type="button" onClick={() => setStep("nope")} className="border border-[rgba(255,255,255,0.1)] px-8 py-3 font-space text-[#e8e7e9] hover:border-[rgba(200,255,46,0.3)] transition-colors">No</button>
@@ -312,7 +313,7 @@ export default function PricingSurvey() {
         <QuestionCard>
           <ProgressBar current={1} total={6} />
           <span className="eyebrow block mb-6">Question 1 of 6</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours a day do you wish you could get back from screen time?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours would you wish to get back on a daily basis?</h2>
           <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We are looking for real numbers.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
@@ -350,7 +351,7 @@ export default function PricingSurvey() {
               <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder="" className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="mt-12">
-              <button type="submit" className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
+              <button type="submit" onClick={() => goToNext(s)} className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
             </div>
           </QuestionCard>
         </div>
