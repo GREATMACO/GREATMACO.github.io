@@ -104,7 +104,7 @@ const PAIN_OPTIONS = [
 ];
 
 export default function PricingSurvey() {
-  const [step, setStep] = useState<"landing" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
+  const [step, setStep] = useState<"landing" | "pre1" | "pre2" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
   const [result, setResult] = useState<SurveyResponse | null>(null);
   const [selectedPain, setSelectedPain] = useState<string>("");
@@ -200,8 +200,10 @@ export default function PricingSurvey() {
   /* ── Navigation helpers (only control which page is visible, not data) ── */
   const goToNext = (from: string) => {
     switch (from) {
+      case "landing": setStep("pre1"); break;
+      case "pre1": setStep("pre2"); break;
+      case "pre2": setStep("screener"); break;
       case "screener": setStep("vw1"); break;
-      case "vw1": setStep("vw2"); break;
       case "vw2": setStep("vw3"); break;
       case "vw3": setStep("vw4"); break;
       case "vw4": setStep("pain"); break;
@@ -229,7 +231,7 @@ export default function PricingSurvey() {
               Your responses help us set fair pricing. By starting this survey you agree to our{" "}
               <a href="/privacy" className="text-[#c8ff2e] underline hover:text-[#d4ff4a] transition-colors">Privacy Policy</a>.
             </p>
-            <button onClick={() => setStep("screener")} className="btn-primary text-base px-10 py-4">
+            <button onClick={() => setStep("pre1")} className="btn-primary text-base px-10 py-4">
               Start survey <span className="arrow ml-2">→</span>
             </button>
           </div>
@@ -263,12 +265,46 @@ export default function PricingSurvey() {
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-3xl">
 
+      {/* ── Pre-survey questions: lead the user in before the real survey ── */}
+      <div id="page-pre1" className={step !== "pre1" ? "hidden" : ""}>
+        <QuestionCard>
+          <span className="eyebrow block mb-6">Quick question</span>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How often does your screen time make you feel frustrated instead of rested?</h2>
+          <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto mt-4">
+            {[
+              { label: "Every day", value: "every-day" },
+              { label: "Most days", value: "most-days" },
+              { label: "Sometimes", value: "sometimes" },
+              { label: "Rarely", value: "rarely" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => goToNext("pre1")}
+                className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200"
+              >
+                <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
+              </button>
+            ))}
+          </div>
+        </QuestionCard>
+      </div>
+
+      <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
+        <QuestionCard>
+          <span className="eyebrow block mb-6">Quick question</span>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if you could actually get those lost hours back?</h2>
+          <p className="text-[#9f9dab] text-sm mb-10">That is the problem we are solving. Before we launch, we need pricing data from real users.</p>
+          <button onClick={() => goToNext("pre2")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
+        </QuestionCard>
+      </div>
+
       {/* ── Screener (Q1) ── */}
       <div id="page-screener" className={step !== "screener" ? "hidden" : ""}>
         <QuestionCard>
           <ProgressBar current={1} total={6} />
           <span className="eyebrow block mb-6">Question 1 of 6</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours a day do you waste on your phone without meaning to?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours a day do you wish you could get back from screen time?</h2>
           <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We are looking for real numbers.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
