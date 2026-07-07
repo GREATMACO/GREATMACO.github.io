@@ -206,6 +206,7 @@ export default function PricingSurvey() {
       case "pre1": setStep("pre2"); break;
       case "pre2": setStep("screener"); break;
       case "screener": setStep("vw1"); break;
+      case "vw1": setStep("vw2"); break;
       case "vw2": setStep("vw3"); break;
       case "vw3": setStep("vw4"); break;
       case "vw4": setStep("pain"); break;
@@ -222,7 +223,7 @@ export default function PricingSurvey() {
           <span className="eyebrow block mb-6">Pricing Research</span>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Help us set a fair price.</h2>
           <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-4">
-            We are building a product that gives you your time back. Before we launch, we need honest pricing data from real users.
+            We are building a product that gives you your time back.
           </p>
           <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-10">
             The survey takes two minutes. All you need to do is share your numbers and opinions.
@@ -270,7 +271,7 @@ export default function PricingSurvey() {
       {/* ── Pre-survey questions: lead the user in before the real survey ── */}
       <div id="page-pre1" className={step !== "pre1" ? "hidden" : ""}>
         <QuestionCard>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">You had plans today. You grabbed your phone. Two hours later you are still scrolling.</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">You had plans today. You grabbed your phone. One hour later and you are still scrolling.</h2>
 
           {/* Floating field box with yes/no question */}
           <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
@@ -294,8 +295,7 @@ export default function PricingSurvey() {
 
       <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
         <QuestionCard>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if there was a solution that let you use your time the way you actually want to?</h2>
-          <p className="text-[#9f9dab] text-sm mb-4">Here is ours:</p>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if there was a solution that would let you use your time the way you actually want to?</h2>
 
           {/* Floating field box with yes/no question */}
           <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
@@ -351,7 +351,7 @@ export default function PricingSurvey() {
               <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder="" className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="mt-12">
-              <button type="submit" onClick={() => goToNext(s)} className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
+              <button type="button" onClick={() => goToNext(s)} className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
             </div>
           </QuestionCard>
         </div>
