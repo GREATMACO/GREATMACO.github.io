@@ -295,7 +295,7 @@ export default function PricingSurvey() {
           <span className="eyebrow block mb-6">Quick question</span>
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if you could actually get those lost hours back?</h2>
           <p className="text-[#9f9dab] text-sm mb-10">That is the problem we are solving. Before we launch, we need pricing data from real users.</p>
-          <button onClick={() => goToNext("pre2")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
+          <button type="button" onClick={() => goToNext("pre2")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
         </QuestionCard>
       </div>
 
