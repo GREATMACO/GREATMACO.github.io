@@ -298,7 +298,7 @@ export default function PricingSurvey() {
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if there was a solution that would let you use your time the way you actually want to?</h2>
 
           {/* Floating field box with yes/no question */}
-          <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
+          <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-lg">
             <p className="text-[#9f9dab] mb-5">Does that sound like something you would try?</p>
             <div className="flex gap-3 justify-center">
               <button type="button" onClick={() => goToNext("pre2")} className="bg-[#c8ff2e] px-8 py-3 font-space font-semibold text-[#000] hover:bg-[#d4ff4a] transition-colors">Yes</button>
@@ -314,7 +314,6 @@ export default function PricingSurvey() {
           <ProgressBar current={1} total={6} />
           <span className="eyebrow block mb-6">Question 1 of 6</span>
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours would you wish to get back on a daily basis?</h2>
-          <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We are looking for real numbers.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
               <button
@@ -364,8 +363,7 @@ export default function PricingSurvey() {
           <ProgressBar current={6} total={6} />
           <span className="eyebrow block mb-6 text-center">Question 6 of 6</span>
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What would a fair monthly price be for an app that saves you hours every day?</h2>
-          <p className="text-[#9f9dab] mb-2 text-sm text-center">Choose the range that feels right for the value you'd get.</p>
-          <p className="text-[#6b6980] mb-8 text-xs text-center">Pick any option below. <span className="block mt-1 text-[#6b6980]">Tap once to select.</span></p>
+          <p className="text-[#9f9dab] mb-8 text-xs text-center">Choose the range that feels right for the value you'd get.</p>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
             {PAIN_OPTIONS.map((opt) => (
               <button key={opt.value} type="button" onClick={() => setSelectedPain(opt.value)} data-pain-select={opt.value} className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPain === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}>

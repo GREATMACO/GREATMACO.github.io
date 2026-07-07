@@ -57,9 +57,8 @@ export default function Waitlist() {
           <span className="eyebrow block mb-8">Join the Collective</span>
 
           <h1 className="section-heading section-heading-lg max-w-xl mx-auto">
-            Get lost to
-            <br />
-            <span className="text-[#c8ff2e]">find yourself.</span>
+            Get lost to find
+            <span className="text-[#c8ff2e]">yourself.</span>
           </h1>
 
           <p className="mt-8 mx-auto max-w-md text-[#9f9dab] text-lg leading-relaxed">
