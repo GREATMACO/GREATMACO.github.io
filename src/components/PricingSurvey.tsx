@@ -109,6 +109,8 @@ export default function PricingSurvey() {
   const [result, setResult] = useState<SurveyResponse | null>(null);
   const [selectedPain, setSelectedPain] = useState<string>("");
   const [selectedScreener, setSelectedScreener] = useState<string>("");
+  const [selectedPre1, setSelectedPre1] = useState<string>("");
+  const [selectedPre2, setSelectedPre2] = useState<string>("");
 
   // Shuffle VW questions once on mount, stored only for display order & analysis metadata
   useEffect(() => { if (!vwOrder.length) setVwOrder(shuffleArray(VW_QUESTION_TEMPLATES)); }, []);
@@ -269,19 +271,20 @@ export default function PricingSurvey() {
       <div id="page-pre1" className={step !== "pre1" ? "hidden" : ""}>
         <QuestionCard>
           <span className="eyebrow block mb-6">Quick question</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How often does your screen time make you feel drained instead of relaxed?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">You had plans today. You grabbed your phone. Two hours later you are still scrolling.</h2>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto mt-4">
             {[
-              { label: "Every day", value: "every-day" },
+              { label: "Every single day", value: "every-day" },
               { label: "Most days", value: "most-days" },
-              { label: "Sometimes", value: "sometimes" },
+              { label: "A few times a week", value: "a-few-times" },
               { label: "Rarely", value: "rarely" },
             ].map((opt) => (
               <button
                 key={opt.value}
                 type="button"
-                onClick={() => goToNext("pre1")}
-                className="feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200"
+                onClick={() => { setSelectedPre1(opt.value); goToNext("pre1"); }}
+                data-pre-select={opt.value}
+                className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPre1 === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}
               >
                 <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
               </button>
@@ -293,9 +296,26 @@ export default function PricingSurvey() {
       <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
         <QuestionCard>
           <span className="eyebrow block mb-6">Quick question</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if you could get those lost hours back?</h2>
-          <p className="text-[#9f9dab] text-sm mb-10">That is the problem we are solving. Before we launch, we need pricing data from real users.</p>
-          <button type="button" onClick={() => goToNext("pre2")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Tomorrow you open the app, do your session, put it away and get on with your life.</h2>
+          <p className="text-[#9f9dab] text-sm mb-8">How realistic does that sound?</p>
+          <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
+            {[
+              { label: "Very realistic", value: "very-realistic" },
+              { label: "Somewhat realistic", value: "somewhat-realistic" },
+              { label: "Unrealistic, but hopeful", value: "hopeful" },
+              { label: "Not realistic at all", value: "not-realistic" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => { setSelectedPre2(opt.value); goToNext("pre2"); }}
+                data-pre-select={opt.value}
+                className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPre2 === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}
+              >
+                <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
+              </button>
+            ))}
+          </div>
         </QuestionCard>
       </div>
 
