@@ -81,10 +81,10 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 /* ─── VW Question data ─── */
 
 const VW_QUESTION_TEMPLATES = [
-  { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price do you stop and think this is too much?', subtext: 'Be honest. We need real numbers.', placeholder: "" },
+  { id: "tooExpensive", label: '"Fair Price"', question: 'Based on what we just discussed, what would a fair monthly price be for an app that gives you time back?', subtext: '', placeholder: "" },
   { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether our app actually works?', subtext: 'Any lower than that and it feels like a scam. Where is that line for you?', placeholder: "" },
-  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'It is still tempting. But something about the price feels wrong.', placeholder: "" },
-  { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'You pay immediately. No hesitation.', placeholder: "" },
+  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price would you still get the app — even though there are cheaper options?', subtext: 'Still tempting. But something about the price feels wrong.', placeholder: "" },
+  { id: "bargain", label: '"Bargain"', question: 'At what price would you subscribe without thinking twice?', subtext: '', placeholder: "" },
 ];
 
 const SCREENER_OPTIONS = [
@@ -104,7 +104,7 @@ const PAIN_OPTIONS = [
 ];
 
 export default function PricingSurvey() {
-  const [step, setStep] = useState<"landing" | "pre1" | "nope" | "pre2" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
+  const [step, setStep] = useState<"landing" | "pre1" | "nope" | "pre2" | "screener" | "solutionInfo" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
   const [result, setResult] = useState<SurveyResponse | null>(null);
   const [selectedPain, setSelectedPain] = useState<string>("");
@@ -205,12 +205,22 @@ export default function PricingSurvey() {
       case "landing": setStep("pre1"); break;
       case "pre1": setStep("pre2"); break;
       case "pre2": setStep("screener"); break;
-      case "screener": setStep("vw1"); break;
+      case "screener": setStep("solutionInfo"); break;
+      case "solutionInfo": setStep("vw1"); break;
       case "vw1": setStep("vw2"); break;
       case "vw2": setStep("vw3"); break;
       case "vw3": setStep("vw4"); break;
       case "vw4": setStep("pain"); break;
       case "pain": break; // handled by form submit
+    }
+  };
+
+  /* ── Go back to previous VW question ── */
+  const goBack = (from: string) => {
+    switch (from) {
+      case "vw2": setStep("vw1"); break;
+      case "vw3": setStep("vw2"); break;
+      case "vw4": setStep("vw3"); break;
     }
   };
 
@@ -334,6 +344,16 @@ export default function PricingSurvey() {
         </QuestionCard>
       </div>
 
+      {/* ── Info: what the solution actually is ── */}
+      <div id="page-solution-info" className={step !== "solutionInfo" ? "hidden" : ""}>
+        <QuestionCard>
+          <span className="eyebrow block mb-6">Here is our approach</span>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">404 detects when you reach for a distracting app and sends a grounding nudge.</h2>
+          <p className="text-[#9f9dab] text-sm mb-10">Think of it as a focus coach — not another meditation app. Based on everything you just shared, we need your pricing input.</p>
+          <button type="button" onClick={() => goToNext("solutionInfo")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
+        </QuestionCard>
+      </div>
+
       {/* ── VW Questions (Q2–Q5), one per page ── */}
       {vwOrder.length > 0 && [
         { step: "vw1", idx: 0 }, { step: "vw2", idx: 1 }, { step: "vw3", idx: 2 }, { step: "vw4", idx: 3 }
@@ -343,13 +363,16 @@ export default function PricingSurvey() {
             <ProgressBar current={idx + 2} total={6} />
             <span className="eyebrow block mb-6">Question {idx + 2} of 6 ({vwOrder[idx]?.label})</span>
             <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">{vwOrder[idx]?.question}</h2>
-            <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>
+            {vwOrder[idx]?.subtext && <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>}
             {/* Numeric input, type="text" with inputMode="numeric" for universal browser support */}
             <div className="relative inline-block mb-2">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#6b6980] font-space font-bold text-3xl pointer-events-none select-none">€</span>
               <input type="text" inputMode="numeric" name={vwOrder[idx]?.id} placeholder="" className="w-48 h-16 pl-12 pr-4 text-center text-3xl font-space font-bold text-[#e8e7e9] bg-transparent border-b-2 border-[rgba(200,255,46,0.3)] focus:border-[#c8ff2e] outline-none transition-colors duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
-            <div className="mt-12">
+            <div className="mt-12 flex justify-center gap-6">
+              {idx > 0 && (
+                <button type="button" onClick={() => goBack(s)} className="text-[#9f9dab] text-sm underline hover:text-[#c8ff2e] transition-colors">← Back to previous</button>
+              )}
               <button type="button" onClick={() => goToNext(s)} className="btn-primary text-base px-8 py-3">Next <span className="arrow ml-2">→</span></button>
             </div>
           </QuestionCard>
