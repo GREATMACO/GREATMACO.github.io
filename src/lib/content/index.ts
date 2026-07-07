@@ -116,7 +116,7 @@ const heroContent: import("@/lib/types").HeroContent = {
   tagline: "A tool that actually works.",
   headline: "Apps built to keep you scrolling.",
   gradientHighlight: "It just takes a tool to stop it.",
-  subtitle: "We built 404 because we needed a simple tool that actually works. Not another wellness app with inspirational quotes.",
+  subtitle: "We are building 404 because we needed a simple tool that actually works. Not another wellness app with inspirational quotes.",
   ctaText: "Join the waitlist",
   ctaHref: "/waitlist",
   secondaryText: "Read the manifesto",

@@ -104,7 +104,7 @@ const PAIN_OPTIONS = [
 ];
 
 export default function PricingSurvey() {
-  const [step, setStep] = useState<"landing" | "pre1" | "pre2" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
+  const [step, setStep] = useState<"landing" | "pre1" | "nope" | "pre2" | "screener" | "vw1" | "vw2" | "vw3" | "vw4" | "pain" | "thankyou">("landing");
   const [vwOrder, setVwOrder] = useState<typeof VW_QUESTION_TEMPLATES>([]);
   const [result, setResult] = useState<SurveyResponse | null>(null);
   const [selectedPain, setSelectedPain] = useState<string>("");
@@ -270,51 +270,39 @@ export default function PricingSurvey() {
       {/* ── Pre-survey questions: lead the user in before the real survey ── */}
       <div id="page-pre1" className={step !== "pre1" ? "hidden" : ""}>
         <QuestionCard>
-          <span className="eyebrow block mb-6">Quick question</span>
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">You had plans today. You grabbed your phone. Two hours later you are still scrolling.</h2>
-          <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto mt-4">
-            {[
-              { label: "Every single day", value: "every-day" },
-              { label: "Most days", value: "most-days" },
-              { label: "A few times a week", value: "a-few-times" },
-              { label: "Rarely", value: "rarely" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => { setSelectedPre1(opt.value); goToNext("pre1"); }}
-                data-pre-select={opt.value}
-                className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPre1 === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}
-              >
-                <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
-              </button>
-            ))}
+
+          {/* Floating field box with yes/no question */}
+          <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
+            <p className="text-[#9f9dab] mb-5">Sounds familiar?</p>
+            <div className="flex gap-3 justify-center">
+              <button type="button" onClick={() => goToNext("pre1")} className="bg-[#c8ff2e] px-8 py-3 font-space font-semibold text-[#000] hover:bg-[#d4ff4a] transition-colors">Yes</button>
+              <button type="button" onClick={() => setStep("nope")} className="border border-[rgba(255,255,255,0.1)] px-8 py-3 font-space text-[#e8e7e9] hover:border-[rgba(200,255,46,0.3)] transition-colors">No</button>
+            </div>
           </div>
+        </QuestionCard>
+      </div>
+
+      {/* ── "Not for you" state ── */}
+      <div id="page-nope" className={step !== "nope" ? "hidden" : ""}>
+        <QuestionCard>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Thank you for your time.</h2>
+          <p className="text-[#9f9dab] mb-10">If this does not apply to you, no worries. This survey is designed for people who want to understand their screen time better.</p>
+          <a href="/" className="btn-primary text-base px-8 py-3 inline-block">Go back to home <span className="arrow ml-2">→</span></a>
         </QuestionCard>
       </div>
 
       <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
         <QuestionCard>
-          <span className="eyebrow block mb-6">Quick question</span>
           <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Tomorrow you open the app, do your session, put it away and get on with your life.</h2>
-          <p className="text-[#9f9dab] text-sm mb-8">How realistic does that sound?</p>
-          <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
-            {[
-              { label: "Very realistic", value: "very-realistic" },
-              { label: "Somewhat realistic", value: "somewhat-realistic" },
-              { label: "Unrealistic, but hopeful", value: "hopeful" },
-              { label: "Not realistic at all", value: "not-realistic" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => { setSelectedPre2(opt.value); goToNext("pre2"); }}
-                data-pre-select={opt.value}
-                className={`feature-card py-5 px-6 text-center hover:border-[#c8ff2e]/40 transition-colors duration-200 ${selectedPre2 === opt.value ? 'border-[#c8ff2e] border-2 bg-[#c8ff2e]/15 scale-[1.03] shadow-lg shadow-[#c8ff2e]/30' : ''}`}
-              >
-                <span className="text-base font-space font-semibold text-[#e8e7e9]">{opt.label}</span>
-              </button>
-            ))}
+
+          {/* Floating field box with yes/no question */}
+          <div className="mt-4 py-5 px-8 border-b-2 border-[rgba(200,255,46,0.3)] text-center mx-auto max-w-sm">
+            <p className="text-[#9f9dab] mb-5">Sounds realistic?</p>
+            <div className="flex gap-3 justify-center">
+              <button type="button" onClick={() => goToNext("pre2")} className="bg-[#c8ff2e] px-8 py-3 font-space font-semibold text-[#000] hover:bg-[#d4ff4a] transition-colors">Yes</button>
+              <button type="button" onClick={() => setStep("nope")} className="border border-[rgba(255,255,255,0.1)] px-8 py-3 font-space text-[#e8e7e9] hover:border-[rgba(200,255,46,0.3)] transition-colors">No</button>
+            </div>
           </div>
         </QuestionCard>
       </div>

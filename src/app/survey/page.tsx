@@ -17,7 +17,7 @@ export default function Survey() {
             <span className="text-[#c8ff2e]">we want the right number.</span>
           </h1>
           <p className="mt-8 mx-auto max-w-xl text-[#9f9dab] text-lg leading-relaxed">
-            We built this app because we needed it ourselves. Now we need your help to price it right. Not through guesswork, through a real survey. Takes about two minutes, and the results directly shape our launch pricing.
+            We are building this app because we needed it ourselves. Now we need your help to price it right.
           </p>
         </div>
       </section>
