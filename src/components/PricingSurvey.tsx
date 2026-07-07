@@ -82,9 +82,9 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 
 const VW_QUESTION_TEMPLATES = [
   { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price do you stop and think this is too much?', subtext: 'Be honest. We need real numbers.', placeholder: "" },
-  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether the app actually works?', subtext: 'Too low and it feels like a scam. What is that line for you?', placeholder: "" },
-  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'Still tempting. But something feels off.', placeholder: "" },
-  { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'No hesitation. Just buy.', placeholder: "" },
+  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether the app actually works?', subtext: 'Any lower than that and it feels like a scam. Where is that line for you?', placeholder: "" },
+  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'It is still tempting. But something about the price feels wrong.', placeholder: "" },
+  { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'You pay immediately. No hesitation.', placeholder: "" },
 ];
 
 const SCREENER_OPTIONS = [
@@ -220,7 +220,7 @@ export default function PricingSurvey() {
           <span className="eyebrow block mb-6">Pricing Research</span>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Help us set a fair price.</h2>
           <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-4">
-            We are building a product that gives your time back. Before we launch, we need honest pricing data from real users.
+            We are building a product that gives you your time back. Before we launch, we need honest pricing data from real users.
           </p>
           <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-10">
             The survey takes two minutes. All you need to do is share your numbers and opinions.
@@ -269,7 +269,7 @@ export default function PricingSurvey() {
       <div id="page-pre1" className={step !== "pre1" ? "hidden" : ""}>
         <QuestionCard>
           <span className="eyebrow block mb-6">Quick question</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How often does your screen time make you feel frustrated instead of rested?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How often does your screen time make you feel drained instead of relaxed?</h2>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto mt-4">
             {[
               { label: "Every day", value: "every-day" },
@@ -293,7 +293,7 @@ export default function PricingSurvey() {
       <div id="page-pre2" className={step !== "pre2" ? "hidden" : ""}>
         <QuestionCard>
           <span className="eyebrow block mb-6">Quick question</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if you could actually get those lost hours back?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What if you could get those lost hours back?</h2>
           <p className="text-[#9f9dab] text-sm mb-10">That is the problem we are solving. Before we launch, we need pricing data from real users.</p>
           <button type="button" onClick={() => goToNext("pre2")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
         </QuestionCard>
