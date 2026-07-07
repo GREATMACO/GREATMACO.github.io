@@ -348,7 +348,7 @@ export default function PricingSurvey() {
       <div id="page-solution-info" className={step !== "solutionInfo" ? "hidden" : ""}>
         <QuestionCard>
           <span className="eyebrow block mb-6">Here is how it works</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">When you reach for a distracting app, 404 catches the impulse and sends a grounding nudge.</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">We will design a personalised app to give you the freedom to use your time however you want! Regardless of the forces acting on you!</h2>
           <p className="text-[#9f9dab] text-sm mb-10">Based on everything you just shared, we need your pricing input. No features to list, just results that matter.</p>
           <button type="button" onClick={() => goToNext("solutionInfo")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
         </QuestionCard>
