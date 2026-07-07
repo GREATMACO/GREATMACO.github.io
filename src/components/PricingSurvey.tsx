@@ -83,7 +83,7 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 const VW_QUESTION_TEMPLATES = [
   { id: "tooExpensive", label: '"Fair Price"', question: 'Based on what we just discussed, what would a fair monthly price be for an app that gives you time back?', subtext: '', placeholder: "" },
   { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether our app actually works?', subtext: 'Any lower than that and it feels like a scam. Where is that line for you?', placeholder: "" },
-  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price would you still get the app — even though there are cheaper options?', subtext: 'Still tempting. But something about the price feels wrong.', placeholder: "" },
+  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price would you still get an app, even though there are cheaper options?', subtext: 'Still tempting. But something about the price feels wrong.', placeholder: "" },
   { id: "bargain", label: '"Bargain"', question: 'At what price would you subscribe without thinking twice?', subtext: '', placeholder: "" },
 ];
 
@@ -347,9 +347,9 @@ export default function PricingSurvey() {
       {/* ── Info: what the solution actually is ── */}
       <div id="page-solution-info" className={step !== "solutionInfo" ? "hidden" : ""}>
         <QuestionCard>
-          <span className="eyebrow block mb-6">Here is our approach</span>
-          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">404 detects when you reach for a distracting app and sends a grounding nudge.</h2>
-          <p className="text-[#9f9dab] text-sm mb-10">Think of it as a focus coach — not another meditation app. Based on everything you just shared, we need your pricing input.</p>
+          <span className="eyebrow block mb-6">Here is how it works</span>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">When you reach for a distracting app, 404 catches the impulse and sends a grounding nudge.</h2>
+          <p className="text-[#9f9dab] text-sm mb-10">Based on everything you just shared, we need your pricing input. No features to list, just results that matter.</p>
           <button type="button" onClick={() => goToNext("solutionInfo")} className="btn-primary text-base px-8 py-3">Continue <span className="arrow ml-2">→</span></button>
         </QuestionCard>
       </div>
