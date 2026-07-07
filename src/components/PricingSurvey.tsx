@@ -82,7 +82,7 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 
 const VW_QUESTION_TEMPLATES = [
   { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price do you stop and think this is too much?', subtext: 'Be honest. We need real numbers.', placeholder: "" },
-  { id: "tooCheap", label: '"Too Cheap"', question: 'Below what price would you doubt the quality?', subtext: 'Too low and it feels like a scam. What is that line for you?', placeholder: "" },
+  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you question whether the app actually works?', subtext: 'Too low and it feels like a scam. What is that line for you?', placeholder: "" },
   { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'Still tempting. But something feels off.', placeholder: "" },
   { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'No hesitation. Just buy.', placeholder: "" },
 ];
@@ -217,11 +217,11 @@ export default function PricingSurvey() {
         <div className="mx-auto max-w-xl text-center">
           <span className="eyebrow block mb-6">Pricing Research</span>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Help us set a fair price.</h2>
-          <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-6">
-            We are building a tool that gives your time back. Simple as that.
+          <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-4">
+            We are building a product that gives your time back. Before we launch, we need honest pricing data from real users.
           </p>
           <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-10">
-            To set fair pricing we need honest numbers from real users. This takes two minutes. Your answers go directly into our pricing model.
+            The survey takes two minutes. All you need to do is share your numbers and opinions.
           </p>
           {/* Consent banner */}
           <div className="text-center">
