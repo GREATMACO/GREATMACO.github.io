@@ -81,10 +81,10 @@ function QuestionCard({ children }: { children: React.ReactNode }) {
 /* ─── VW Question data ─── */
 
 const VW_QUESTION_TEMPLATES = [
-  { id: "tooExpensive", label: '"Too Expensive"', question: 'Where does a monthly price feel like a rip off?', subtext: 'We need your honest number. No right answer.', placeholder: "" },
-  { id: "tooCheap", label: '"Too Cheap"', question: 'At what price would you suspect this tool is not worth the effort?', subtext: 'Too low and it feels like a scam. Where does that line start for you?', placeholder: "" },
-  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'Where does the price still feel okay, but your finger hesitates before tap buy?', subtext: 'Still tempting. But the math starts catching up to you.', placeholder: "" },
-  { id: "bargain", label: '"Bargain"', question: 'At what price would you subscribe without a second thought?', subtext: 'You tap buy without thinking twice. That is the price.', placeholder: "" },
+  { id: "tooExpensive", label: '"Too Expensive"', question: 'At what price do you stop and think this is too much?', subtext: 'Be honest. We need real numbers.', placeholder: "" },
+  { id: "tooCheap", label: '"Too Cheap"', question: 'Below what price would you doubt the quality?', subtext: 'Too low and it feels like a scam. What is that line for you?', placeholder: "" },
+  { id: "gettingExpensive", label: '"Getting Expensive"', question: 'At what price do you hesitate, but still consider buying?', subtext: 'Still tempting. But something feels off.', placeholder: "" },
+  { id: "bargain", label: '"Bargain"', question: 'At what price would you pay without thinking twice?', subtext: 'No hesitation. Just buy.', placeholder: "" },
 ];
 
 const SCREENER_OPTIONS = [
@@ -216,13 +216,12 @@ export default function PricingSurvey() {
       <section className="py-32 px-6 border-b border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
           <span className="eyebrow block mb-6">Pricing Research</span>
-          <h2 className="text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How much is your attention worth?</h2>
-          <p className="text-[#9f9dab] text-lg leading-relaxed mb-6">
-            Many people spend hours a day on their screen. Not because they want to, but because it is right there. Apps and feeds are designed to catch you. We have to fight the same pull.
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Help us set a fair price.</h2>
+          <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-6">
+            We are building a tool that gives your time back. Simple as that.
           </p>
-          <p className="text-[#9f9dab] text-lg leading-relaxed mb-10">
-            Those hours. Getting them back. What would that be worth to you?
-            We are building something that gives your attention back to you. To set fair pricing, we need your honest perspective.
+          <p className="text-[#9f9dab] text-base sm:text-lg leading-relaxed mb-10">
+            To set fair pricing we need honest numbers from real users. This takes two minutes. Your answers go directly into our pricing model.
           </p>
           {/* Consent banner */}
           <div className="text-center">
@@ -243,7 +242,7 @@ export default function PricingSurvey() {
     return (
       <section className="py-32 px-6 border-t border-[rgba(255,255,255,0.04)]">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Thank you. Your input matters.</h2>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">Thank you. Your input matters.</h2>
           <p className="text-[#9f9dab] mb-10">Your response has been saved. We will use your answers to set fair pricing for the launch.</p>
           <a href="/waitlist" className="btn-primary text-base px-10 py-4 inline-block">Join the waitlist <span className="arrow ml-2">→</span></a>
 
@@ -269,8 +268,8 @@ export default function PricingSurvey() {
         <QuestionCard>
           <ProgressBar current={1} total={6} />
           <span className="eyebrow block mb-6">Question 1 of 6</span>
-          <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How much time per day passes on your screen that you never meant to spend there?</h2>
-          <p className="text-[#9f9dab] mb-10 text-sm">Think about last week. Count only hours you wish you could throw away.</p>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">How many hours a day do you waste on your phone without meaning to?</h2>
+          <p className="text-[#9f9dab] mb-10 text-sm">Be honest. We are looking for real numbers.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {SCREENER_OPTIONS.map((opt) => (
               <button
@@ -299,7 +298,7 @@ export default function PricingSurvey() {
           <QuestionCard>
             <ProgressBar current={idx + 2} total={6} />
             <span className="eyebrow block mb-6">Question {idx + 2} of 6 ({vwOrder[idx]?.label})</span>
-            <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">{vwOrder[idx]?.question}</h2>
+            <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">{vwOrder[idx]?.question}</h2>
             <p className="text-[#9f9dab] text-sm mb-10">{vwOrder[idx]?.subtext}</p>
             {/* Numeric input, type="text" with inputMode="numeric" for universal browser support */}
             <div className="relative inline-block mb-2">
@@ -319,7 +318,7 @@ export default function PricingSurvey() {
           <div className="mx-auto max-w-lg">
           <ProgressBar current={6} total={6} />
           <span className="eyebrow block mb-6 text-center">Question 6 of 6</span>
-          <h2 className="text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What would a fair monthly price be, if this app gave your time back every day?</h2>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-[#e8e7e9] leading-tight max-w-lg mx-auto mb-6">What would a fair monthly price be for an app that saves you hours every day?</h2>
           <p className="text-[#9f9dab] mb-2 text-sm text-center">Choose the range that feels right for the value you'd get.</p>
           <p className="text-[#6b6980] mb-8 text-xs text-center">Pick any option below. <span className="block mt-1 text-[#6b6980]">Tap once to select.</span></p>
           <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
