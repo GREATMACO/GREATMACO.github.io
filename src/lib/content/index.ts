@@ -146,9 +146,9 @@ const aboutPillars: Pillar[] = [
     index: 0,
   },
   {
-    title: "Acut",
+    title: "Aktiv",
     subtitle: "AI interruption system",
-    description: "Detects the scroll impulse in real-time and offers an alternative before the habit loop completes.",
+    description: "The system detects the scroll impulse in real time and offers an alternative before the habit loop completes.",
     index: 1,
   },
   {
@@ -207,7 +207,7 @@ export function getAboutPrinciples() {
 
 const teamData: TeamMember[] = [
   { name: "Oliver", role: "Co-Founder", desc: "Stared at a screen time report and saw 12 hours on a school night." },
-  { name: "Lasse", role: "Co-Founder", desc: "Evidence-based architecture. Clinical research meets real-world behavior." },
+  { name: "Lasse", role: "Co-Founder", desc: "He builds the evidence-based architecture. Clinical research meets real-world behavior." },
   { name: "Marlon", role: "Co-Founder", desc: "Interface design that feels like a deep breath." },
   { name: "Elena", role: "Co-Founder", desc: "Therapist collaboration layer." },
   { name: "Merle", role: "Co-Founder", desc: "Community infrastructure." },
