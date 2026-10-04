@@ -30,7 +30,7 @@ out/
 
 3. Click **"Quickconnect"**
 4. In the right panel (remote), navigate to: `/home/404collective/out/`
-5. In the left panel (local), navigate to: `C:\Users\marlo\OneDrive\Desktop\Everything\Projects\404_collective\out\`
+5. In the left panel (local), navigate to: `C:\Users\marlo\Everything\Projects\404_collective\out\`
 6. Select ALL files in the left panel → **drag to right panel**
 7. Wait for upload to complete
 
@@ -48,7 +48,7 @@ out/
 Run these in PowerShell as one block:
 ```powershell
 # 1. Navigate to project
-cd "C:\Users\marlo\OneDrive\Desktop\Everything\Projects\404_collective"
+cd "C:\Users\marlo\Everything\Projects\404_collective"
 
 # 2. Make sure build exists
 npm run build
@@ -60,7 +60,7 @@ explorer out
 ## OPTION D: GitHub + Alwaysdata Git Deploy (future deploys)
 
 ```powershell
-cd "C:\Users\marlo\OneDrive\Desktop\Everything\Projects\404_collective"
+cd "C:\Users\marlo\Everything\Projects\404_collective"
 git init
 git add -A
 git commit -m "Deploy 404 Collective to Alwaysdata"

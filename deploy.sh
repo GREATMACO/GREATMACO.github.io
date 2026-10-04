@@ -41,7 +41,7 @@ case "${1:-}" in
     echo "Run these commands from your terminal:"
     echo ""
     echo "# Initialize git repo if not done:"
-    echo 'cd "C:\Users\marlo\OneDrive\Desktop\Everything\Projects\404_collective"'
+    echo 'cd "C:\Users\marlo\Everything\Projects\404_collective"'
     echo "git init"
     echo "git add -A"
     echo "git commit -m \"Initial deploy\""
