@@ -5,43 +5,30 @@ import { useState } from "react";
 
 /* ─── Configuration — set in Cloudflare Pages Settings (or .env.local) ─── */
 
-const BUTTONDOWN_ENDPOINT = process.env.NEXT_PUBLIC_BUTTONDOWN_ENDPOINT || "";
-const BUTTONDOWN_APIKEY = process.env.NEXT_PUBLIC_BUTTONDOWN_APIKEY || "";
+// Public embed endpoint: a plain HTML form POST, no API key in the browser.
+const BUTTONDOWN_USERNAME = process.env.NEXT_PUBLIC_BUTTONDOWN_USERNAME || "";
+const EMBED_ACTION = BUTTONDOWN_USERNAME
+  ? `https://buttondown.com/api/emails/embed-subscribe/${encodeURIComponent(BUTTONDOWN_USERNAME)}`
+  : "";
 
 export default function Waitlist() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [resetCount, setResetCount] = useState(0);
   const [consentGiven, setConsentGiven] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !consentGiven) return;
-    setLoading(true);
-
-    if (BUTTONDOWN_ENDPOINT && BUTTONDOWN_APIKEY) {
-      try {
-        const res = await fetch(`${BUTTONDOWN_ENDPOINT}/subscribers`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Token ${BUTTONDOWN_APIKEY}`
-          },
-          body: JSON.stringify({ email_address: email, type: 'regular' }),
-        });
-        setStatus(res.ok || res.status === 200 ? "success" : "error");
-        if (res.ok) setEmail("");
-      } catch {
-        setStatus("error");
-      }
-    } else {
-      console.log("[404] Waitlist signup:", email);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!email || !consentGiven || !EMBED_ACTION) {
+      e.preventDefault();
+      if (!EMBED_ACTION) setStatus("error");
+      return;
+    }
+    // Let the native submit open Buttondown's confirmation tab, then swap the UI.
+    setTimeout(() => {
       setStatus("success");
       setEmail("");
-    }
-
-    setLoading(false);
+    }, 0);
   };
 
   const handleReset = () => {
@@ -67,9 +54,9 @@ export default function Waitlist() {
 
           {status === "success" ? (
             <div className="mt-12 py-10 px-8 border border-[#c8ff2e]/20 bg-[#c8ff2e]/5">
-              <p className="text-lg font-space font-semibold text-[#c8ff2e]">You're in the Collective.</p>
+              <p className="text-lg font-space font-semibold text-[#c8ff2e]">Almost in the Collective.</p>
               <p className="mt-2 text-sm text-[#9f9dab]">
-                We'll reach out before launch day. Stay tuned.
+                Confirm your signup in the tab that just opened, then check your inbox.
               </p>
               <button onClick={handleReset} className="mt-6 text-xs text-[#9f9dab] underline hover:text-[#c8ff2e] transition-colors">
                 Back to form
@@ -77,13 +64,20 @@ export default function Waitlist() {
             </div>
           ) : status === "error" ? (
             <div className="mt-12 py-6 px-6 border border-red-500/30 bg-red-950/10">
-              <p className="text-sm text-red-400">Something went wrong. Please try again.</p>
+              <p className="text-sm text-red-400">Signups are paused right now. Please try again later.</p>
               <button onClick={handleReset} className="mt-4 text-xs text-[#9f9dab] underline hover:text-[#c8ff2e] transition-colors">
                 Try again
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mt-12 flex flex-col gap-3 sm:flex-row">
+            <form
+              action={EMBED_ACTION || undefined}
+              method="post"
+              target="_blank"
+              onSubmit={handleSubmit}
+              className="mt-12 flex flex-col gap-3 sm:flex-row"
+            >
+              <input type="hidden" name="embed" value="1" />
               {!consentGiven ? (
                 <div className="text-center mx-auto w-full">
                   <p className="text-sm text-[#6b6980] mb-4">
@@ -104,6 +98,7 @@ export default function Waitlist() {
                 <>
                   <input
                     type="email"
+                    name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"

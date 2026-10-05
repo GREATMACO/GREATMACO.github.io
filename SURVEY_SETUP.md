@@ -11,11 +11,11 @@
 Die Waitlist-Emails gehen automatisch in deine Buttondown Subscribers Liste.
 
 **Konfiguriert in:**
-- `.env.local` und `NEXT_PUBLIC_WAITLIST_ENDPOINT=https://buttondown.email/api/eps/subscribers?apikey=bd_eu1_a947d7ab-711d-40b9-b70c-836afea9c0db`
+- `.env.local` und `NEXT_PUBLIC_WAITLIST_ENDPOINT=https://buttondown.email/api/eps/subscribers?apikey=bd_eu1_DEIN_KEY (nie ins Repo)`
 
 **Cloudflare Pages Settings:**
 Gehe zu → Workers & Pages → 404collective-demo → Settings → Environment Variables
-- `NEXT_PUBLIC_WAITLIST_ENDPOINT` = `https://buttondown.email/api/eps/subscribers?apikey=bd_eu1_a947d7ab-711d-40b9-b70c-836afea9c0db`
+- `NEXT_PUBLIC_WAITLIST_ENDPOINT` = `https://buttondown.email/api/eps/subscribers?apikey=bd_eu1_DEIN_KEY (nie ins Repo)`
 
 ---
 

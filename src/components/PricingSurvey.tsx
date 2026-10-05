@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 
 /* ─── Configuration ─── */
 
-const SURVEY_ENDPOINT = process.env.NEXT_PUBLIC_BUTTONDOWN_ENDPOINT || "";
-const SURVEY_APIKEY = process.env.NEXT_PUBLIC_BUTTONDOWN_APIKEY || "";
 const STORAGE_KEY = "404_experiment_pricing-survey-v3";
 const CONSENT_KEY = "404_survey_consent";
 
@@ -40,18 +38,6 @@ function saveResponse(data: SurveyResponse): void {
   const existing: SurveyResponse[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   existing.push(data);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
-}
-
-/* ─── Pricing heuristic ─── */
-
-function calcOptimalPrice(
-  tooExpensive: number,
-  tooCheap: number,
-  gettingExpensive: number,
-  bargain: number,
-): number {
-  const core = Math.round((Math.max(tooCheap, bargain) + Math.min(tooExpensive, gettingExpensive)) / 2);
-  return Math.max(bargain, Math.min(core, gettingExpensive));
 }
 
 /* ─── Components ─── */
@@ -152,19 +138,6 @@ export default function PricingSurvey() {
 
     // Save to localStorage (array-based for future bulk analysis)
     saveResponse(vwFields);
-
-    // Post to Buttondown subscriber metadata (all data lands in one email entry)
-    if (SURVEY_ENDPOINT && SURVEY_APIKEY) {
-      const surveyEmail = `survey_404collective_${Date.now()}@temp.buttondown.email`;
-      fetch(`${SURVEY_ENDPOINT}/subscribers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Token ${SURVEY_APIKEY}` },
-        body: JSON.stringify({
-          email_address: surveyEmail,
-          metadata: { ...vwFields, fairPrice: calcOptimalPrice(vwFields.vwTooExpensive, vwFields.vwTooCheap, vwFields.vwGettingExpensive, vwFields.vwBargain) },
-        }),
-      }).catch(() => {});
-    }
 
     setResult(vwFields);
     setStep("thankyou");
